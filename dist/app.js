@@ -12,7 +12,7 @@ const admin_1 = __importDefault(require("./routes/admin"));
 const shop_1 = __importDefault(require("./routes/shop"));
 const error_1 = require("./controllers/error");
 const app = (0, express_1.default)();
-app.set('view engine', 'pug');
+app.set('view engine', 'ejs');
 app.set('views', 'dist/views');
 app.use(body_parser_1.default.json());
 app.use(body_parser_1.default.urlencoded({ extended: true }));

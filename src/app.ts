@@ -9,7 +9,7 @@ import shopRoutes from './routes/shop';
 import { getPageNotFoundPage as get404 } from './controllers/error';
 
 const app = express();
-app.set('view engine', 'pug');
+app.set('view engine', 'ejs');
 app.set('views', 'dist/views');
 
 app.use(bodyParser.json());

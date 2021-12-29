@@ -1,4 +1,10 @@
-const fs = require('fs');
+// import fs from 'fs';
+import fs from 'fs/promises';
+import path, { dirname } from 'path';
+import { fileURLToPath} from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 const requestHandler = (request, response) => {
   const url = request.url;
@@ -13,7 +19,7 @@ const requestHandler = (request, response) => {
   if (url === '/message' && method === 'POST') {
     const body = [];
     request.on('data', (chunk) => {
-      console.log(chunk);
+      // console.log(chunk);
       body.push(chunk);
     });
     return request.on('end', () => {
@@ -34,4 +40,4 @@ const requestHandler = (request, response) => {
   response.end();
 };
 
-module.exports = requestHandler;
+export default requestHandler;
