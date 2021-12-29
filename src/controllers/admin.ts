@@ -11,11 +11,18 @@ export const getAddProductPage = (request: Request, response: Response, next: Ne
   })
 }
 
-export const postAddProductPage = (request: Request, response: Response, next: NextFunction) => {
+export const postAddProductPage = async (request: Request, response: Response, next: NextFunction) => {
   const { title, imageUrl, description, price } = request.body;
-  const product = new Product(null, title, imageUrl, description, price);
-  product.save();
-  response.redirect('/');
+  const product = new Product(null, title, imageUrl, description, +price);
+  try {
+    const finishedSaving = await product.save();
+    if (finishedSaving) {
+      response.redirect('/');
+    }
+  } catch (error) {
+    console.log(error);
+  }
+  // product.save().then(() => response.redirect('/')).catch(error => console.log(error))
 }
 
 export const getEditProductPage = (request: Request, response: Response, next: NextFunction) => {

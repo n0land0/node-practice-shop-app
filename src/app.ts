@@ -7,6 +7,7 @@ import rootDir from './util/path';
 import adminRoutes from './routes/admin';
 import shopRoutes from './routes/shop';
 import { getPageNotFoundPage as get404 } from './controllers/error';
+import { db } from './util/database';
 
 const app = express();
 app.set('view engine', 'ejs');

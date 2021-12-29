@@ -3,24 +3,44 @@ import Product from '../models/Product';
 import Cart from '../models/Cart';
 import { ProductObj, CartObj } from '../models/interfaces';
 
-export const getIndexPage = (request: Request, response: Response, next: NextFunction) => {
-  Product.fetchAll((products: ProductObj[]) => {
+export const getIndexPage = async (request: Request, response: Response, next: NextFunction) => {
+  // Product.fetchAll((products: ProductObj[]) => {
+  //   response.render('shop/index', {
+  //     pageTitle: 'Shop',
+  //     path: '/',
+  //     prods: products
+  //   });
+  // });
+  try {
+    const [ rows, fieldData ] = await Product.fetchAll();
     response.render('shop/index', {
       pageTitle: 'Shop',
       path: '/',
-      prods: products
+      prods: rows
     });
-  });
+  } catch (error) {
+    console.log(error);
+  }
 }
 
-export const getProductsPage = (request: Request, response: Response, next: NextFunction) => {
-  Product.fetchAll((products: ProductObj[]) => {
+export const getProductsPage = async (request: Request, response: Response, next: NextFunction) => {
+  // Product.fetchAll((products: ProductObj[]) => {
+  //   response.render('shop/product-list', {
+  //     pageTitle: 'All Products',
+  //     path: '/products',
+  //     prods: products
+  //   });
+  // });
+  try {
+    const [ rows, fieldData ] = await Product.fetchAll();
     response.render('shop/product-list', {
       pageTitle: 'All Products',
       path: '/products',
-      prods: products
+      prods: rows
     });
-  });
+  } catch (error) {
+    console.log(error);
+  }
 }
 
 export const getCartPage = (request: Request, response: Response, next: NextFunction) => {
@@ -62,15 +82,26 @@ export const postCartPageDeleteItem = (request: Request, response: Response, nex
   })
 }
 
-export const getSingleProductPage = (request: Request, response: Response, next: NextFunction) => {
+export const getSingleProductPage = async (request: Request, response: Response, next: NextFunction) => {
   const { productId } = request.params;
-  Product.fetchProductById(productId, (product: ProductObj) => {
+  // Product.fetchProductById(productId, (product: ProductObj) => {
+  //   response.render('shop/product-detail', {
+  //     pageTitle: product.title,
+  //     path: '/products',
+  //     product
+  //   });
+  // });
+  try {
+    const [ row, fieldData ] = await Product.fetchProductById(productId);
+    const product = row[0];
     response.render('shop/product-detail', {
       pageTitle: product.title,
       path: '/products',
       product
     });
-  });
+  } catch (error) {
+    console.log(error);
+  }
 }
 
 export const getOrdersPage = (request: Request, response: Response, next: NextFunction) => {

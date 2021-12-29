@@ -1,11 +1,6 @@
 "use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-const fs_1 = __importDefault(require("fs"));
-const path_1 = require("../util/path");
-const Cart_1 = __importDefault(require("./Cart"));
+const database_1 = require("../util/database");
 class Product {
     constructor(id, title, imageUrl, description, price) {
         this.id = id;
@@ -15,51 +10,63 @@ class Product {
         this.price = price;
     }
     save() {
-        (0, path_1.getProductsFromFile)((products) => {
-            if (this.id) {
-                const existingProductIndex = products.findIndex(prod => prod.id === this.id);
-                const updatedProducts = [...products];
-                updatedProducts[existingProductIndex] = this;
-                fs_1.default.writeFile(path_1.dataProductsFile, JSON.stringify(updatedProducts), (error) => {
-                    if (error) {
-                        console.log(error);
-                    }
-                });
-            }
-            else {
-                this.id = Math.random().toString();
-                products.push(this);
-                fs_1.default.writeFile(path_1.dataProductsFile, JSON.stringify(products), (error) => {
-                    if (error) {
-                        console.log(error);
-                    }
-                });
-            }
-        });
+        return database_1.db.execute('INSERT INTO products (title, imageUrl, description, price) VALUES (?, ?, ?, ?)', [this.title, this.imageUrl, this.description, this.price]);
+        // getProductsFromFile((products: ProductObj[]) => {
+        //   if (this.id) {
+        //     const existingProductIndex: number = products.findIndex(prod => prod.id === this.id);
+        //     const updatedProducts: ProductObj[] = [ ...products ];
+        //     updatedProducts[existingProductIndex] = this;
+        //     fs.writeFile(dataProductsFile, JSON.stringify(updatedProducts), (error) => {
+        //       if (error) {
+        //         console.log(error);
+        //       }
+        //     });
+        //   } else {
+        //     this.id = Math.random().toString();
+        //     products.push(this);
+        //     fs.writeFile(dataProductsFile, JSON.stringify(products), (error) => {
+        //       if (error) {
+        //         console.log(error);
+        //       }
+        //     });
+        //   }
+        // })
     }
-    static fetchAll(callback) {
-        (0, path_1.getProductsFromFile)(callback);
+    // static fetchAll(callback: Function) {
+    static fetchAll() {
+        return database_1.db.execute('SELECT * FROM products');
+        // getProductsFromFile(callback);
+        // const getAllProducts = async () => {
+        // try {
+        //   const result = await db.execute('SELECT * FROM products');
+        //   console.log(result[0], result[1])
+        // } catch (error) {
+        //   console.log(error)
+        // }
+        // }
     }
-    static fetchProductById(id, callback) {
+    // static fetchProductById(id: string, callback: Function) {
+    static fetchProductById(id) {
+        return database_1.db.execute('SELECT * FROM products WHERE products.id = ?', [id]);
         // getProductsFromFile(callback, id);
-        (0, path_1.getProductsFromFile)((products) => {
-            const product = products.find((prod) => id === prod.id);
-            callback(product);
-        });
+        // getProductsFromFile((products: ProductObj[]) => {
+        //   const product = products.find((prod: ProductObj) => id === prod.id);
+        //   callback(product);
+        // })
     }
     static deleteProductById(id) {
-        (0, path_1.getProductsFromFile)((products) => {
-            const product = products.find(prod => prod.id === id);
-            const updatedProducts = products.filter(prod => prod.id !== id);
-            console.log(id);
-            console.log(updatedProducts);
-            fs_1.default.writeFile(path_1.dataProductsFile, JSON.stringify(updatedProducts), (error) => {
-                if (!error) {
-                    console.log(error);
-                }
-                Cart_1.default.deleteProductById(id, product.price);
-            });
-        });
+        // getProductsFromFile((products: ProductObj[]) => {
+        //   const product = products.find(prod => prod.id === id);
+        //   const updatedProducts = products.filter(prod => prod.id !== id);
+        //   console.log(id)
+        //   console.log(updatedProducts)
+        //   fs.writeFile(dataProductsFile, JSON.stringify(updatedProducts), (error) => {
+        //     if (!error) {
+        //       console.log(error);
+        //     }
+        //     Cart.deleteProductById(id, product.price);
+        //   });
+        // })
     }
 }
 exports.default = Product;
