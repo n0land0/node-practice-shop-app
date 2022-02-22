@@ -10,3 +10,10 @@ export interface CartObj {
   products: [];
   totalPrice: number;
 }
+
+export interface IUser {
+  id: number;
+  name: string;
+  email: string;
+  password: string;
+}

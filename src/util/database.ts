@@ -1,10 +1,16 @@
-import mysql from 'mysql2';
+// import mysql from 'mysql2';
+import { Sequelize } from 'sequelize';
 
-const pool = mysql.createPool({
-  host: 'localhost',
-  user: 'root',
-  database: 'shop-app',
-  password: 'N0l3h0l3!'
+export const sequelize = new Sequelize('shop-app', 'root', 'N0l3h0l3!', {
+  dialect: 'mysql',
+  host: 'localhost'
 });
-
-export const db = pool.promise();
+//
+// const pool = mysql.createPool({
+//   host: 'localhost',
+//   user: 'root',
+//   database: 'shop-app',
+//   password: 'N0l3h0l3!'
+// });
+//
+// export const db = pool.promise();
